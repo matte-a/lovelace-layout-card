@@ -2,8 +2,8 @@ import { css, html } from "lit";
 import {
   CardConfig,
   CardConfigGroup,
-  LovelaceCard,
   GridViewConfig,
+  LovelaceCard,
 } from "../types";
 import { BaseLayout } from "./base-layout";
 
@@ -56,9 +56,8 @@ class GridLayout extends BaseLayout {
         --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
         --layout-padding: ${this._config.layout?.padding ?? "0px"};
         --layout-height: ${this._config.layout?.height ?? "auto"};
-        --layout-overflow: ${
-          this._config.layout?.height !== undefined ? "auto" : "visible"
-        };
+        --layout-overflow: ${this._config.layout?.height !== undefined ? "auto" : "visible"
+      };
       }`;
     this.shadowRoot.appendChild(styleEl);
   }
@@ -119,6 +118,9 @@ class GridLayout extends BaseLayout {
       )) {
         if (key.startsWith("grid") || key === "place-self")
           el.style.setProperty(key, value as string);
+        else if (key === "nomargin")
+          el.style.setProperty("margin", "0px");
+
       }
       root.appendChild(el);
     }
