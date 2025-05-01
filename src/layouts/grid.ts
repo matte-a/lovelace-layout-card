@@ -45,6 +45,18 @@ class GridLayout extends BaseLayout {
     if (changedProperties.has("cards") || changedProperties.has("_editMode")) {
       this._placeCards();
     }
+    if (changedProperties.has("_editMode")) {
+      const root = this.shadowRoot?.querySelector("#root") as HTMLElement;
+      if (this.lovelace?.editMode) {
+        root.style.setProperty("display", "flex");
+        root.style.setProperty("flex-wrap", "wrap");
+      }
+      else {
+        root.style.removeProperty("flex-wrap")
+        root.style.setProperty("display", "grid");
+
+      }
+    }
   }
 
   async firstUpdated() {
