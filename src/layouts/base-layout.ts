@@ -1,8 +1,8 @@
 import { css, html, LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import {
-  CardConfigGroup,
   CardConfig,
+  CardConfigGroup,
   LovelaceCard,
   ViewConfig,
 } from "../types";
@@ -25,7 +25,17 @@ export class BaseLayout extends LitElement {
       this._config.layout = this._config.view_layout;
     }
   }
+  public connectedCallback() {
+    super.connectedCallback();
 
+
+    this.cards.forEach((c) => (c.editMode = this.lovelace?.editMode));
+    this._editMode = this.lovelace?.editMode ?? false;
+  }
+
+  public disconnectedCallback() {
+    super.disconnectedCallback();
+  }
   async updated(changedProperties: Map<string, any>) {
     if (
       changedProperties.has("lovelace") &&
