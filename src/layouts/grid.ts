@@ -47,6 +47,7 @@ class GridLayout extends BaseLayout {
     }
     if (changedProperties.has("_editMode")) {
       const root = this.shadowRoot?.querySelector("#root") as HTMLElement;
+      if (!root) return;
       if (this.lovelace?.editMode) {
         root.style.setProperty("display", "flex");
         root.style.setProperty("flex-wrap", "wrap");
