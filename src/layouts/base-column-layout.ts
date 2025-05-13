@@ -4,9 +4,9 @@ import {
   CardConfigGroup,
   CardConfig,
   LovelaceCard,
+  HuiCard,
   ColumnViewConfig,
 } from "../types";
-import { ResizeObserver } from "resize-observer/lib/ResizeObserver";
 import { BaseLayout } from "./base-layout";
 
 export class BaseColumnLayout extends BaseLayout {
@@ -90,8 +90,8 @@ export class BaseColumnLayout extends BaseLayout {
         --column-max-width: ${column_max_width}px;
         --column-width: ${column_width}px;
         --column-widths: ${this._config.layout?.column_widths ?? "none"};
-        --layout-margin: ${this._config.layout?.margin ?? "4px 4px 0px 4px"};
-        --layout-padding: ${this._config.layout?.padding ?? "0px"};
+        --layout-margin: ${this._config.layout?.margin ?? "0px 4px 0px 4px"};
+        --layout-padding: ${this._config.layout?.padding ?? "4px 0px 4px 0px"};
         --card-margin: ${
           this._config.layout?.card_margin ??
           "var(--masonry-view-card-margin, 4px 4px 8px)"
@@ -142,7 +142,7 @@ export class BaseColumnLayout extends BaseLayout {
     }
   }
 
-  _shouldShow(card: LovelaceCard, config: CardConfig, index: number) {
+  _shouldShow(card: LovelaceCard | HuiCard, config: CardConfig, index: number) {
     if (!super._shouldShow(card, config, index)) return false;
 
     if (this._config.layout?.reflow) {
@@ -156,8 +156,8 @@ export class BaseColumnLayout extends BaseLayout {
     return false;
   }
 
-  isBreak(card: LovelaceCard) {
-    return card.localName === "layout-break";
+  isBreak(config: CardConfig) {
+    return config.type === "custom:layout-break";
   }
 
   async _makeLayout() {
