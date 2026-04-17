@@ -13,14 +13,15 @@ export interface HuiCard extends HTMLElement {
 
 export interface CardConfig {
   type: string;
+  card_type?: string;
   view_layout?: {
     show?:
-      | "always"
-      | "never"
-      | {
-          mediaquery?: string;
-          sidebar?: string;
-        };
+    | "always"
+    | "never"
+    | {
+      mediaquery?: string;
+      sidebar?: string;
+    };
     column?: number;
   };
 }

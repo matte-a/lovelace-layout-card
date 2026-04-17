@@ -127,15 +127,19 @@ class GridLayout extends BaseLayout {
 
     for (const card of cards.filter((c) => this.lovelace?.editMode || c.show)) {
       const el = this.getCardElement(card);
-      for (const [key, value] of Object.entries(
-        card.config?.view_layout ?? {}
-      )) {
-        if (key.startsWith("grid") || key === "place-self")
-          el.style.setProperty(key, value as string);
-        else if (key === "nomargin")
-          el.style.setProperty("margin", "0px");
 
-      }
+      if (card.config.type === 'custom:bubble-card' && card.config.card_type === "pop-up")
+        el.style.setProperty("margin", "0px");
+      else
+        for (const [key, value] of Object.entries(
+          card.config?.view_layout ?? {}
+        )) {
+          if (key.startsWith("grid") || key === "place-self")
+            el.style.setProperty(key, value as string);
+          else if (key === "nomargin")
+            el.style.setProperty("margin", "0px");
+
+        }
       root.appendChild(el);
     }
   }
