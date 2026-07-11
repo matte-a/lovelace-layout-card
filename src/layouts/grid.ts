@@ -138,8 +138,10 @@ class GridLayout extends BaseLayout {
         )) {
           if (key.startsWith("grid") || key === "place-self")
             el.style.setProperty(key, value as string);
-          else if (key === "nomargin")
+          else if (key === "nomargin") {
             el.style.setProperty("margin", "0px");
+            el.style.setProperty("height", "0px");
+          }
 
         }
       root.appendChild(el);
