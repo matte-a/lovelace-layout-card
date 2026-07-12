@@ -12,6 +12,7 @@ class GridLayout extends BaseLayout {
   _mediaQueries: Array<MediaQueryList | null> = [];
   _layoutMQs: Array<MediaQueryList | null> = [];
   _config: GridViewConfig;
+  _lastPlacedCards: Array<LovelaceCard | HuiCard> | null = null;   // ADD THIS
 
   async setConfig(config: GridViewConfig) {
     await super.setConfig(config);
@@ -43,7 +44,7 @@ class GridLayout extends BaseLayout {
 
   async updated(changedProperties) {
     await super.updated(changedProperties);
-    if (changedProperties.has("cards") || changedProperties.has("_editMode")) {
+    if ((changedProperties.has("cards") && this._cardsActuallyChanged()) || changedProperties.has("_editMode")) {
       this._placeCards();
     }
     if (changedProperties.has("_editMode")) {
@@ -60,7 +61,14 @@ class GridLayout extends BaseLayout {
       }
     }
   }
-
+  _cardsActuallyChanged(): boolean {
+    if (!this._lastPlacedCards) return true;
+    if (this._lastPlacedCards.length !== this.cards.length) return true;
+    for (let i = 0; i < this.cards.length; i++) {
+      if (this._lastPlacedCards[i] !== this.cards[i]) return true;
+    }
+    return false;
+  }
   async firstUpdated() {
     this._setGridStyles();
 
@@ -113,6 +121,8 @@ class GridLayout extends BaseLayout {
   }
 
   _placeCards() {
+    this._lastPlacedCards = [...this.cards];   // ADD THIS LINE
+
     const root = this.shadowRoot?.querySelector("#root");
     while (root?.firstChild) root.removeChild(root.firstChild);
     let cards: CardConfigGroup[] = this.cards.map((card, index) => {
@@ -130,7 +140,8 @@ class GridLayout extends BaseLayout {
 
       if (card.config.type === 'custom:bubble-card' && card.config.card_type === "pop-up") {
         el.style.setProperty("margin", "0px");
-        el.style.setProperty("height", "0px");
+        if (!this.lovelace.editMode)
+          el.style.setProperty("height", "0px");
       }
       else
         for (const [key, value] of Object.entries(
@@ -140,7 +151,8 @@ class GridLayout extends BaseLayout {
             el.style.setProperty(key, value as string);
           else if (key === "nomargin") {
             el.style.setProperty("margin", "0px");
-            el.style.setProperty("height", "0px");
+            if (!this.lovelace.editMode)
+              el.style.setProperty("height", "0px");
           }
 
         }
